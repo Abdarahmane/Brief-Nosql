@@ -4,17 +4,13 @@ const Survey = require('./surveysModule');
 const Question = require('./questionsModule');
 const Answer = require('./answersModule');
 
-// Connexion à MongoDB
+
 connectDB();
 
-/**
- * CRUD pour les Enquêtes (Surveys)
- */
 
-// Créer une enquête
 const createSurvey = async (surveyData) => {
     const newSurvey = new Survey({
-        _id: surveyData._id,  // ID spécifié manuellement
+        _id: surveyData._id, 
         name: surveyData.name,
         description: surveyData.description,
         createdAt: new Date(),
@@ -26,7 +22,7 @@ const createSurvey = async (surveyData) => {
         console.log('Survey Created:', savedSurvey);
         return savedSurvey._id;
     } catch (err) {
-        if (err.code === 11000) {  // Gérer l'erreur de duplication de clé
+        if (err.code === 11000) {  
             console.error(`Error: Duplicate ID ${surveyData._id} already exists.`);
         } else {
             console.error('Error creating survey:', err);
@@ -34,7 +30,7 @@ const createSurvey = async (surveyData) => {
     }
 };
 
-// Lister toutes les enquêtes
+
 const listSurveys = async () => {
     try {
         const surveys = await Survey.find();
@@ -45,7 +41,7 @@ const listSurveys = async () => {
     }
 };
 
-// Obtenir une enquête par ID
+
 const getSurveyById = async (id) => {
     try {
         const survey = await Survey.findById(id);
@@ -56,7 +52,7 @@ const getSurveyById = async (id) => {
     }
 };
 
-// Mettre à jour une enquête
+// // Mettre à jour une enquête
 const updateSurvey = async (id, updateData) => {
     try {
         const updatedSurvey = await Survey.findByIdAndUpdate(id, updateData, { new: true });
@@ -77,14 +73,10 @@ const deleteSurvey = async (id) => {
     }
 };
 
-/**
- * CRUD pour les Questions (Questions)
- */
 
-// Créer une question
 const createQuestion = async (questionData) => {
     const newQuestion = new Question({
-        _id: questionData._id,  // ID spécifié manuellement
+        _id: questionData._id,  
         surveyId: questionData.surveyId,
         title: questionData.title,
         type: questionData.type,
@@ -105,7 +97,7 @@ const createQuestion = async (questionData) => {
     }
 };
 
-// Lister toutes les questions
+
 const listQuestions = async () => {
     try {
         const questions = await Question.find();
@@ -116,7 +108,7 @@ const listQuestions = async () => {
     }
 };
 
-// Obtenir une question par ID
+
 const getQuestionById = async (id) => {
     try {
         const question = await Question.findById(id);
@@ -127,7 +119,6 @@ const getQuestionById = async (id) => {
     }
 };
 
-// Mettre à jour une question
 const updateQuestion = async (id, updateData) => {
     try {
         const updatedQuestion = await Question.findByIdAndUpdate(id, updateData, { new: true });
@@ -138,7 +129,7 @@ const updateQuestion = async (id, updateData) => {
     }
 };
 
-// Supprimer une question
+
 const deleteQuestion = async (id) => {
     try {
         await Question.findByIdAndDelete(id);
@@ -148,14 +139,10 @@ const deleteQuestion = async (id) => {
     }
 };
 
-/**
- * CRUD pour les Réponses (Answers)
- */
 
-// Créer une réponse
 const createAnswer = async (answerData) => {
     const newAnswer = new Answer({
-        _id: answerData._id,  // ID spécifié manuellement
+        _id: answerData._id,  
         questionId: answerData.questionId,
         title: answerData.title
     });
@@ -173,7 +160,7 @@ const createAnswer = async (answerData) => {
     }
 };
 
-// Lister toutes les réponses
+
 const listAnswers = async () => {
     try {
         const answers = await Answer.find();
@@ -184,7 +171,7 @@ const listAnswers = async () => {
     }
 };
 
-// Obtenir une réponse par ID
+
 const getAnswerById = async (id) => {
     try {
         const answer = await Answer.findById(id);
@@ -195,7 +182,7 @@ const getAnswerById = async (id) => {
     }
 };
 
-// Mettre à jour une réponse
+
 const updateAnswer = async (id, updateData) => {
     try {
         const updatedAnswer = await Answer.findByIdAndUpdate(id, updateData, { new: true });
@@ -206,7 +193,7 @@ const updateAnswer = async (id, updateData) => {
     }
 };
 
-// Supprimer une réponse
+
 const deleteAnswer = async (id) => {
     try {
         await Answer.findByIdAndDelete(id);
@@ -216,9 +203,8 @@ const deleteAnswer = async (id) => {
     }
 };
 
-// Exemple de test pour vérifier les opérations CRUD
 (async () => {
-    // Créer une enquête avec un ID personnalisé
+    
     const surveyId = await createSurvey({
         _id: 'survey_001',
         name: 'Customer Feedback Survey',
@@ -229,7 +215,6 @@ const deleteAnswer = async (id) => {
         }
     });
 
-    // Créer une question liée à l'enquête
     const questionId = await createQuestion({
         _id: 'question_001',
         surveyId: surveyId,
@@ -239,33 +224,31 @@ const deleteAnswer = async (id) => {
         allowMultipleSelections: false
     });
 
-    // Créer une réponse liée à la question
+    
     const answerId = await createAnswer({
         _id: 'answer_001',
         questionId: questionId,
         title: 'Excellent'
     });
 
-    // Lister toutes les enquêtes, questions, et réponses
+   s
     await listSurveys();
     await listQuestions();
     await listAnswers();
 
-    // Mettre à jour l'enquête créée
+    
     await updateSurvey(surveyId, { name: 'Updated Customer Feedback Survey' });
 
-    // Mettre à jour la question créée
+    
     await updateQuestion(questionId, { title: 'How would you rate our service overall?' });
 
-    // Mettre à jour la réponse créée
+   
     await updateAnswer(answerId, { title: 'Very Good' });
 
-    // Supprimer la réponse créée
+
     await deleteAnswer(answerId);
 
-    // Supprimer la question créée
     await deleteQuestion(questionId);
 
-    // Supprimer l'enquête créée
     await deleteSurvey(surveyId);
 })();

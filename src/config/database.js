@@ -1,17 +1,19 @@
+const { MongoClient } = require('mongodb');
 
-const mongoose = require('mongoose');
+const url = 'mongodb://localhost:27017';
+const dbName = 'abc_surveydb'; 
 
-const connectDB = async () => {
+async function connectDB() {
+    const client = new MongoClient(url);
+
     try {
-        await mongoose.connect('mongodb://localhost:27017/abc-survey-db');
+        await client.connect();
         console.log('MongoDB connected');
+        return client;
     } catch (err) {
         console.error('MongoDB connection failed:', err);
-        process.exit(1);
+        throw err;
     }
-};
+}
 
 module.exports = connectDB;
-
-
-

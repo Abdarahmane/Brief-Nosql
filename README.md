@@ -1,304 +1,270 @@
-Survey App
+# Survey App
 
-Description
+## Description
 
-Survey App est une application JavaScript qui permet de gérer des enquêtes de satisfaction client. Elle utilise MongoDB pour stocker les données et permet de réaliser des opérations CRUD (Create, Read, Update, Delete) sur les enquêtes, les questions, et les réponses associées.
-Prérequis
+Survey App est une application JavaScript simple permettant de gérer les fiches d'enquête de satisfaction des clients. L'application utilise une base de données MongoDB pour stocker les données et permet d'effectuer des opérations CRUD (Create, Get, Update, Delete) sur ces fiches.
 
-Avant de commencer, on installe les éléments suivants :
+## Prérequis
 
-    Node.js (version 12 ou supérieure)
-    MongoDB (version 4.0 ou supérieure)
+Avant de commencer, assurez-vous d'avoir installé les éléments suivants :
 
-Installation
+- [Node.js](https://nodejs.org/) (version 12 ou supérieure)
+- [MongoDB](https://www.mongodb.com/try/download/community) (version 4.0 ou supérieure)
 
- pour configurer le projet sur  machine locale :
+## Installation
 
-    Clonez le repository :
+Suivez ces étapes pour configurer le projet sur votre machine locale :
 
-    bash
+1. **Clonez le repository :**
 
-git clone https://github.com/CoachFofana/abc-survey-app.git
+    ```bash
+    git clone <https://github.com/Abdarahmane/Brief-Nosql.git>
+    ```
 
-Accédez au dossier du projet :
+2. **Accédez au dossier du projet :**
 
-bash
+    ```bash
+    cd abc-survey-app
+    ```
 
-cd abc-survey-app
 
-Installez les dépendances :
+3. **Configurez la base de données :**
 
-bash
+    - Assurez-vous que MongoDB est en cours d'exécution sur votre machine locale.
+    - Mettez les paramètres de connexion dans `config/database.js`.
 
-    npm install
-
-    Configurez la base de données :
-        Assurez-vous que MongoDB est en cours d'exécution sur votre machine locale.
-        Mettez à jour les paramètres de connexion dans config/database.js.
-
-Utilisation
+4. **Utilisation:**
 
 Pour démarrer l'application, exécutez la commande suivante :
 
-bash
-
+```bash
 npm start
 
-Fonctionnalités
-1. Gestion des Enquêtes (Surveys)
+```
+# Fonctionnalités
 
-    Créer une enquête :
+1.**Gestion des Enquêtes (Surveys)**
 
-    
+Ce module permet de gérer les enquêtes de satisfaction des clients.
+      Fonction : createSurvey(survey)
 
-createSurvey(surveyData)
-
-Crée une nouvelle enquête avec les données spécifiées.
-
-    Paramètre : surveyData (Object) – Les informations de l'enquête à créer.
-    Retour : ID de l'enquête créée (String).
-
-
-const surveyId = await surveyModule.createSurvey({
-    _id: 'survey_001',
-    name: 'Customer Feedback Survey',
-    description: 'Collecter les avis des clients',
-    createdBy: {
-        employeeName: 'Jane Doe',
-        employeeRole: 'Supervisor'
-    }
-});
-
-Lister toutes les enquêtes :
-
-
-
-listSurveys()
-
-Retourne une liste de toutes les enquêtes stockées dans la base de données.
-
-    Retour : Liste des enquêtes (Array).
-
-
-
-const surveys = await surveyModule.listSurveys();
-
-Obtenir une enquête par ID :
-
-getSurveyById(id)
-
-Retourne une enquête spécifique basée sur son ID.
-
-    Paramètre : id (String) – ID de l'enquête.
-    Retour : Détails de l'enquête (Object).
-
-
-const survey = await surveyModule.getSurveyById('survey_001');
-
-Mettre à jour une enquête :
-
-
-updateSurvey(id, updateData)
-
-Met à jour une enquête existante avec les nouvelles données spécifiées.
-
-    Paramètres :
-        id (String) – ID de l'enquête à mettre à jour.
-        updateData (Object) – Nouvelles informations à appliquer.
-    Retour : Détails de l'enquête mise à jour (Object).
-
-
-const updatedSurvey = await surveyModule.updateSurvey('survey_001', { name: 'Updated Survey Name' });
-
-Supprimer une enquête :
-
-
-deleteSurvey(id)
-
-Supprime une enquête spécifique basée sur son ID.
-
-    Paramètre : id (String) – ID de l'enquête à supprimer.
-
-
-
-
-    await surveyModule.deleteSurvey('survey_001');
-
-2. Gestion des Questions
-
-    Créer une question :
+Description : Crée une nouvelle enquête.
 
     
+  Paramètres :
 
-createQuestion(questionData)
+- survey (Objet) : Un objet contenant les détails de l'enquête.
 
-Crée une nouvelle question pour une enquête spécifique.
+            surveyId (Number) : ID unique de l'enquête.
+            name (String) : Nom de l'enquête.
+            description (String) : Description de l'enquête.
+            createdBy (String) : Nom du créateur de l'enquête.
 
-    Paramètre : questionData (Object) – Les informations de la question à créer.
-    Retour : ID de la question créée (String).
+    Retour : L'enquête créée.
 
+      Exemple :
 
+       const survey = {
+          surveyId: 1,
+              name: 'Customer Satisfaction Survey',
+       description: 'A survey to measure customer satisfaction.',
+         createdBy: 'Admin'
+      };
 
+      await surveysModule.createSurvey(survey);
 
-const questionId = await questionModule.createQuestion({
-    _id: 'question_001',
-    surveyId: surveyId,
-    title: 'Comment évaluez-vous notre service ?',
-    type: 'multipleChoice',
-    options: ['Excellent', 'Bon', 'Moyen', 'Mauvais'],
-    allowMultipleSelections: false
-});
+Fonction : listSurveys()
 
-Lister toutes les questions :
+    Description : Liste toutes les enquêtes existantes.
 
+    Paramètres : Aucun.
 
+ Retour : Tableau d'enquêtes.
 
-listQuestions()
-
-Retourne une liste de toutes les questions dans la base de données.
-
-    Retour : Liste des questions (Array).
-
-
-
-
-const questions = await questionModule.listQuestions();
-
-Obtenir une question par ID :
+Exemple :
 
 
+    const surveys = await surveysModule.listSurveys();
+    console.log(surveys);
 
-getQuestionById(id)
+Fonction : updateSurvey(id, newDetails)
 
-Retourne une question spécifique basée sur son ID.
-
-    Paramètre : id (String) – ID de la question.
-    Retour : Détails de la question (Object).
-
-
-
-
-const question = await questionModule.getQuestionById('question_001');
-
-Mettre à jour une question :
-
-
-
-updateQuestion(id, updateData)
-
-Met à jour une question existante avec de nouvelles informations.
+    Description : Met à jour les détails d'une enquête.
 
     Paramètres :
-        id (String) – ID de la question à mettre à jour.
-        updateData (Object) – Nouvelles informations à appliquer.
-    Retour : Détails de la question mise à jour (Object).
+               id (Number) : ID de l'enquête à mettre à jour.
+        newDetails (Objet) : Un objet contenant les nouvelles valeurs des propriétés à mettre à jour.
+             name (String) : (Optionnel) Nouveau nom de l'enquête.
+      description (String) : (Optionnel) Nouvelle description de l'enquête.
+        createdBy (String) : (Optionnel) Nouveau nom du créateur.
 
+ Retour : L'enquête mise à jour ou null si l'enquête n'existe pas.
 
+Exemple :
 
+    const updatedSurvey = await surveysModule.updateSurvey(1, { name: 'Updated Survey Name' });
+    console.log(updatedSurvey);
 
-const updatedQuestion = await questionModule.updateQuestion('question_001', { title: 'Comment évaluez-vous notre service global ?' });
+Fonction : deleteSurvey(id)
 
-Supprimer une question :
+ Description : Supprime une enquête par son ID.
 
+    Paramètres :
+        id (Number) : ID de l'enquête à supprimer.
 
+    Retour : Aucun.
 
-deleteQuestion(id)
+Exemple :
 
-Supprime une question spécifique basée sur son ID.
-
-    Paramètre : id (String) – ID de la question à supprimer.
-
-
-
-
-    await questionModule.deleteQuestion('question_001');
-
-3. Gestion des Réponses
-
-    Créer une réponse :
-
+    await surveysModule.deleteSurvey(1);
+    console.log("Survey deleted");
     
+2.**Gestion des Questions (Questions)**
 
-createAnswer(answerData)
+Ce module permet de gérer les questions des enquêtes.
+Fonction : createQuestion(question)
 
-Crée une nouvelle réponse pour une question spécifique.
-
-    Paramètre : answerData (Object) – Les informations de la réponse à créer.
-    Retour : ID de la réponse créée (String).
-
-
-
-
-const answerId = await answerModule.createAnswer({
-    _id: 'answer_001',
-    questionId: questionId,
-    title: 'Excellent'
-});
-
-Lister toutes les réponses :
-
-
-
-listAnswers()
-
-Retourne une liste de toutes les réponses dans la base de données.
-
-    Retour : Liste des réponses (Array).
-
-
-
-
-const answers = await answerModule.listAnswers();
-
-Obtenir une réponse par ID :
-
-
-
-getAnswerById(id)
-
-Retourne une réponse spécifique basée sur son ID.
-
-    Paramètre : id (String) – ID de la réponse.
-    Retour : Détails de la réponse (Object).
-
-
-
-
-const answer = await answerModule.getAnswerById('answer_001');
-
-Mettre à jour une réponse :
-
-
-
-updateAnswer(id, updateData)
-
-Met à jour une réponse existante avec de nouvelles informations.
+Description : Crée une nouvelle question.
 
     Paramètres :
-        id (String) – ID de la réponse à mettre à jour.
-        updateData (Object) – Nouvelles informations à appliquer.
-    Retour : Détails de la réponse mise à jour (Object).
+        question (Objet) : Un objet contenant les détails de la question.
+            questionId (Number) : ID unique de la question.
+            text (String) : Texte de la question.
+            type (String) : Type de question (ex : choix multiples).
+            options (Array) : Options de réponse disponibles (pour les questions à choix multiples).
+
+    Retour : Aucun.
+
+Exemple :
 
 
+    const question = {
+        questionId: 1,
+        text: 'How satisfied are you with our service?',
+        type: 'multiple-choice',
+        options: ['Very satisfied', 'Satisfied', 'Neutral', 'Dissatisfied', 'Very dissatisfied']
+    };
 
+    await questionsModule.createQuestion(question);
 
-const updatedAnswer = await answerModule.updateAnswer('answer_001', { title: 'Très bon' });
+Fonction : readQuestionById(id)
 
-Supprimer une réponse :
+    Description : Lit une question par son ID.
 
+    Paramètres :
+        id (Number) : ID de la question.
 
+    Retour : La question correspondante ou undefined si la question n'existe pas.
 
-deleteAnswer(id)
+Exemple :
 
-Supprime une réponse spécifique basée sur son ID.
+    const question = await questionsModule.readQuestionById(1);
+    console.log(question);
 
-    Paramètre : id (String) – ID de la réponse à supprimer.
+Fonction : updateQuestion(id, newDetails)
 
+    Description : Met à jour les détails d'une question.
 
+    Paramètres :
+        id (Number) : ID de la question à mettre à jour.
+        newDetails (Objet) : Un objet contenant les nouvelles valeurs des propriétés à mettre à jour.
+            text (String) : (Optionnel) Nouveau texte de la question.
+            type (String) : (Optionnel) Nouveau type de question.
+            options (Array) : (Optionnel) Nouvelles options pour la question.
 
+    Retour : Aucun.
 
-    await answerModule.deleteAnswer('answer_001');
+Exemple :
 
-Auteurs
+    await questionsModule.updateQuestion(1, { text: 'How would you rate our service?' });
 
-   [ Abdarahmane Ibrahima Demba](https://github.com/Abdarahmane/Brief-Nosql.git)
+Fonction : deleteQuestion(id)
+
+    Description : Supprime une question par son ID.
+
+    Paramètres :
+        id (Number) : ID de la question à supprimer.
+
+    Retour : Aucun.
+
+Exemple :
+
+    await questionsModule.deleteQuestion(1);
+    console.log("Question deleted");
+
+3.**Gestion des Réponses (Answers)**
+
+Ce module permet de gérer les réponses aux questions des enquêtes.
+
+Fonction : createAnswer(answer)
+
+    Description : Crée une nouvelle réponse à une question.
+
+    Paramètres :
+        answer (Objet) : Un objet contenant les détails de la réponse.
+            answerId (Number) : ID unique de la réponse.
+            questionId (Number) : ID de la question associée.
+            response (String) : Réponse donnée.
+            userId (String) : ID de l'utilisateur ayant répondu.
+
+    Retour : Aucun.
+
+    Exemple :
+
+    const answer = {
+        answerId: 1,
+        questionId: 1,
+        response: 'Very satisfied',
+        userId: 'user123'
+    };
+
+    await answersModule.createAnswer(answer);
+
+Fonction : readAnswerById(id)
+
+    Description : Lit une réponse par son ID.
+
+    Paramètres :
+        id (Number) : ID de la réponse.
+
+    Retour : La réponse correspondante ou undefined si la réponse n'existe pas.
+
+    Exemple :
+
+    const answer = await answersModule.readAnswerById(1);
+    console.log(answer);
+
+Fonction : updateAnswer(id, newDetails)
+
+    Description : Met à jour les détails d'une réponse.
+
+    Paramètres :
+        id (Number) : ID de la réponse à mettre à jour.
+        newDetails (Objet) : Un objet contenant les nouvelles valeurs des propriétés à mettre à jour.
+            response (String) : (Optionnel) Nouvelle réponse.
+            questionId (Number) : (Optionnel) Nouveau ID de la question associée.
+            userId (String) : (Optionnel) Nouveau ID de l'utilisateur ayant répondu.
+
+    Retour : Aucun.
+
+Exemple :
+
+    await answersModule.updateAnswer(1, { response: 'Satisfied' });
+
+Fonction : deleteAnswer(id)
+
+    Description : Supprime une réponse par son ID.
+
+    Paramètres :
+        id (Number) : ID de la réponse à supprimer.
+
+    Retour : Aucun.
+
+Exemple :
+
+      await answersModule.deleteAnswer(1);
+console.log("Answer deleted");
+
+# Authors
+
+[Abdrahmane Ibrahima Demba ](https://github.com/Abdarahmane/Brief-Nosql.git)

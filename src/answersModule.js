@@ -1,77 +1,41 @@
+let answers = [];
 
-const mongoose = require('mongoose');
+async function createAnswer(answer) {
+    answers.push(answer);
+    console.log('Answer Created:', answer);
+    return answer;
+}
 
-const AnswerSchema = new mongoose.Schema({
-    _id: String,
-    questionId: String,
-    title: String
-});
+async function readAnswerById(id) {
+    const answer = answers.find(answer => answer.answerId === id);
+    console.log('Answer Found:', answer);
+    return answer;
+}
 
-const Answer = mongoose.model('Answer', AnswerSchema);
-
-const createAnswer = async (answerData) => {
-    const newAnswer = new Answer({
-        _id: answerData._id,
-        questionId: answerData.questionId,
-        title: answerData.title
-    });
-
-    try {
-        const savedAnswer = await newAnswer.save();
-        console.log('Answer Created:', savedAnswer);
-        return savedAnswer._id;
-    } catch (err) {
-        if (err.code === 11000) {
-            console.error(`Error: Duplicate ID ${answerData._id} already exists.`);
-        } else {
-            console.error('Error creating answer:', err);
-        }
+async function updateAnswer(id, newDetails) {
+    const index = answers.findIndex(answer => answer.answerId === id);
+    if (index !== -1) {
+        answers[index] = { ...answers[index], ...newDetails };
+        console.log('Answer Updated:', answers[index]);
+        return answers[index];
     }
-};
+    console.log('Answer Not Found for Update');
+    return null;
+}
 
-const listAnswers = async () => {
-    try {
-        const answers = await Answer.find();
-        console.log('Answers:', answers);
-        return answers;
-    } catch (err) {
-        console.error('Error listing answers:', err);
+async function deleteAnswer(id) {
+    const initialLength = answers.length;
+    answers = answers.filter(answer => answer.answerId !== id);
+    if (answers.length < initialLength) {
+        console.log('Answer Deleted:', id);
+    } else {
+        console.log('Answer Not Found for Deletion');
     }
-};
-
-const getAnswerById = async (id) => {
-    try {
-        const answer = await Answer.findById(id);
-        console.log('Answer:', answer);
-        return answer;
-    } catch (err) {
-        console.error('Error getting answer:', err);
-    }
-};
-
-const updateAnswer = async (id, updateData) => {
-    try {
-        const updatedAnswer = await Answer.findByIdAndUpdate(id, updateData, { new: true });
-        console.log('Answer Updated:', updatedAnswer);
-        return updatedAnswer;
-    } catch (err) {
-        console.error('Error updating answer:', err);
-    }
-};
-
-const deleteAnswer = async (id) => {
-    try {
-        await Answer.findByIdAndDelete(id);
-        console.log('Answer Deleted');
-    } catch (err) {
-        console.error('Error deleting answer:', err);
-    }
-};
+}
 
 module.exports = {
     createAnswer,
-    listAnswers,
-    getAnswerById,
+    readAnswerById,
     updateAnswer,
     deleteAnswer
 };

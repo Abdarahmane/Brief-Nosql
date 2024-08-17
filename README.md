@@ -18,7 +18,7 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
 1. **Clonez le repository :**
 
     ```bash
-    git clone <https://github.com/Abdarahmane/Brief-Nosql.git>
+    git clone https://github.com/Abdarahmane/Brief-Nosql.git
     ```
 
 2. **Accédez au dossier du projet :**
@@ -27,244 +27,264 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
     cd abc-survey-app
     ```
 
-
 3. **Configurez la base de données :**
 
     - Assurez-vous que MongoDB est en cours d'exécution sur votre machine locale.
     - Mettez les paramètres de connexion dans `config/database.js`.
 
-4. **Utilisation:**
+4. **Utilisation :**
 
-Pour démarrer l'application, exécutez la commande suivante :
+    Pour démarrer l'application, exécutez la commande suivante :
 
-```bash
-npm start
+    ```bash
+    node ./src/index.js
+    ```
 
-```
-# Fonctionnalités
+## Fonctionnalités
 
-1.**Gestion des Enquêtes (Surveys)**
+### 1. Gestion des Enquêtes (Surveys)
 
-Ce module permet de gérer les enquêtes de satisfaction des clients.
-      Fonction : createSurvey(survey)
+- **Fonction :** `createSurvey(db, survey)`
 
-Description : Crée une nouvelle enquête.
+  **Description :** Crée une nouvelle enquête dans la base de données.  
+  **Paramètres :**
+  - `db` (Object) : Instance de la base de données MongoDB.
+  - `survey` (Object) : Un objet contenant les détails de l'enquête.
+    - `surveyId` (Number) : ID unique de l'enquête.
+    - `name` (String) : Nom de l'enquête.
+    - `description` (String) : Description de l'enquête.
+    - `createdAt` (String) : Date et heure de création.
+    - `createdBy` (Object) : Informations sur le créateur.
+      - `employeeName` (String) : Nom de l'employé ayant créé l'enquête.
+      - `employeeRole` (String) : Rôle de l'employé.
+    - `questions` (Array) : Liste des questions associées à l'enquête.
+  **Retour :** ID de l'enquête créée.
+
+  **Exemple :**
+
+  ```javascript
+  const survey = {
+    surveyId: 1,
+    name: 'Enquête de Satisfaction 001',
+    description: 'Enquête visant à évaluer la satisfaction des clients concernant nos services.',
+    createdAt: new Date().toISOString(),
+    createdBy: {
+      employeeName: 'Jane Smith',
+      employeeRole: 'Responsable du service client'
+    },
+    questions: []
+  };
+
+  await surveysModule.createSurvey(db, survey);
+
+    Fonction : listSurveys(db)
+
+    Description : Liste toutes les enquêtes existantes dans la base de données.
+    Paramètres :
+        db (Object) : Instance de la base de données MongoDB.
+        Retour : Tableau des enquêtes.
+
+    Exemple :
 
     
-  Paramètres :
+const surveys = await surveysModule.listSurveys(db);
+console.log(surveys);
 
-- survey (Objet) : Un objet contenant les détails de l'enquête.
+Fonction : updateSurvey(db, id, newDetails)
 
-            surveyId (Number) : ID unique de l'enquête.
-            name (String) : Nom de l'enquête.
-            description (String) : Description de l'enquête.
-            createdBy (String) : Nom du créateur de l'enquête.
+Description : Met à jour les détails d'une enquête existante.
+Paramètres :
 
-    Retour : L'enquête créée.
-
-      Exemple :
-
-       const survey = {
-          surveyId: 1,
-              name: 'Customer Satisfaction Survey',
-       description: 'A survey to measure customer satisfaction.',
-         createdBy: 'Admin'
-      };
-
-      await surveysModule.createSurvey(survey);
-
-Fonction : listSurveys()
-
-    Description : Liste toutes les enquêtes existantes.
-
-    Paramètres : Aucun.
-
- Retour : Tableau d'enquêtes.
+    db (Object) : Instance de la base de données MongoDB.
+    id (Number) : ID de l'enquête à mettre à jour.
+    newDetails (Object) : Un objet contenant les nouvelles valeurs des propriétés à mettre à jour.
+        name (String) : (Optionnel) Nouveau nom de l'enquête.
+        description (String) : (Optionnel) Nouvelle description de l'enquête.
+        createdBy (Object) : (Optionnel) Nouvelles informations sur le créateur.
+        Retour : Enquête mise à jour ou null si l'enquête n'existe pas.
 
 Exemple :
 
 
-    const surveys = await surveysModule.listSurveys();
-    console.log(surveys);
+const updatedSurvey = await surveysModule.updateSurvey(db, 1, { name: 'Enquête de Satisfaction 002' });
+console.log(updatedSurvey);
 
-Fonction : updateSurvey(id, newDetails)
+Fonction : deleteSurvey(db, id)
 
-    Description : Met à jour les détails d'une enquête.
+Description : Supprime une enquête par son ID.
+Paramètres :
 
-    Paramètres :
-               id (Number) : ID de l'enquête à mettre à jour.
-        newDetails (Objet) : Un objet contenant les nouvelles valeurs des propriétés à mettre à jour.
-             name (String) : (Optionnel) Nouveau nom de l'enquête.
-      description (String) : (Optionnel) Nouvelle description de l'enquête.
-        createdBy (String) : (Optionnel) Nouveau nom du créateur.
-
- Retour : L'enquête mise à jour ou null si l'enquête n'existe pas.
-
-Exemple :
-
-    const updatedSurvey = await surveysModule.updateSurvey(1, { name: 'Updated Survey Name' });
-    console.log(updatedSurvey);
-
-Fonction : deleteSurvey(id)
-
- Description : Supprime une enquête par son ID.
-
-    Paramètres :
-        id (Number) : ID de l'enquête à supprimer.
-
+    db (Object) : Instance de la base de données MongoDB.
+    id (Number) : ID de l'enquête à supprimer.
     Retour : Aucun.
 
 Exemple :
 
-    await surveysModule.deleteSurvey(1);
+
+    await surveysModule.deleteSurvey(db, 1);
     console.log("Survey deleted");
-    
-2.**Gestion des Questions (Questions)**
 
-Ce module permet de gérer les questions des enquêtes.
-Fonction : createQuestion(question)
+2. Gestion des Questions (Questions)
 
-Description : Crée une nouvelle question.
+    Fonction : createQuestion(db, question)
 
+    Description : Crée une nouvelle question dans la base de données.
     Paramètres :
-        question (Objet) : Un objet contenant les détails de la question.
+        db (Object) : Instance de la base de données MongoDB.
+        question (Object) : Un objet contenant les détails de la question.
             questionId (Number) : ID unique de la question.
             text (String) : Texte de la question.
-            type (String) : Type de question (ex : choix multiples).
-            options (Array) : Options de réponse disponibles (pour les questions à choix multiples).
+            type (String) : Type de question (ex : choix multiples, évaluation).
+            options (Object) : Options pour les questions à choix multiples.
+                minValue (Number) : Valeur minimale.
+                maxValue (Number) : Valeur maximale.
+                step (Number) : Pas entre les valeurs.
+            answers (Array) : Liste des réponses possibles.
+            Retour : ID de la question créée.
 
+    Exemple :
+
+
+const question = {
+  questionId: 1,
+  text: 'Comment évalueriez-vous notre service ?',
+  type: 'rating',
+  options: {
+    minValue: 1,
+    maxValue: 5,
+    step: 1
+  },
+  answers: [
+    { title: 'Très satisfait' },
+    { title: 'Satisfait' },
+    { title: 'Neutre' },
+    { title: 'Insatisfait' },
+    { title: 'Très insatisfait' }
+  ]
+};
+
+await questionsModule.createQuestion(db, question);
+
+Fonction : readQuestionById(db, id)
+
+Description : Lit une question par son ID.
+Paramètres :
+
+    db (Object) : Instance de la base de données MongoDB.
+    id (Number) : ID de la question.
+    Retour : La question correspondante ou null si la question n'existe pas.
+
+Exemple :
+
+
+const question = await questionsModule.readQuestionById(db, 1);
+console.log(question);
+
+Fonction : updateQuestion(db, id, newDetails)
+
+Description : Met à jour les détails d'une question existante.
+Paramètres :
+
+    db (Object) : Instance de la base de données MongoDB.
+    id (Number) : ID de la question à mettre à jour.
+    newDetails (Object) : Un objet contenant les nouvelles valeurs des propriétés à mettre à jour.
+        text (String) : (Optionnel) Nouveau texte de la question.
+        type (String) : (Optionnel) Nouveau type de question.
+        options (Object) : (Optionnel) Nouvelles options pour la question.
+        Retour : Question mise à jour ou null si la question n'existe pas.
+
+Exemple :
+
+
+await questionsModule.updateQuestion(db, 1, { text: 'Comment évalueriez-vous notre support client ?' });
+
+Fonction : deleteQuestion(db, id)
+
+Description : Supprime une question par son ID.
+Paramètres :
+
+    db (Object) : Instance de la base de données MongoDB.
+    id (Number) : ID de la question à supprimer.
     Retour : Aucun.
 
 Exemple :
 
 
-    const question = {
-        questionId: 1,
-        text: 'How satisfied are you with our service?',
-        type: 'multiple-choice',
-        options: ['Very satisfied', 'Satisfied', 'Neutral', 'Dissatisfied', 'Very dissatisfied']
-    };
-
-    await questionsModule.createQuestion(question);
-
-Fonction : readQuestionById(id)
-
-    Description : Lit une question par son ID.
-
-    Paramètres :
-        id (Number) : ID de la question.
-
-    Retour : La question correspondante ou undefined si la question n'existe pas.
-
-Exemple :
-
-    const question = await questionsModule.readQuestionById(1);
-    console.log(question);
-
-Fonction : updateQuestion(id, newDetails)
-
-    Description : Met à jour les détails d'une question.
-
-    Paramètres :
-        id (Number) : ID de la question à mettre à jour.
-        newDetails (Objet) : Un objet contenant les nouvelles valeurs des propriétés à mettre à jour.
-            text (String) : (Optionnel) Nouveau texte de la question.
-            type (String) : (Optionnel) Nouveau type de question.
-            options (Array) : (Optionnel) Nouvelles options pour la question.
-
-    Retour : Aucun.
-
-Exemple :
-
-    await questionsModule.updateQuestion(1, { text: 'How would you rate our service?' });
-
-Fonction : deleteQuestion(id)
-
-    Description : Supprime une question par son ID.
-
-    Paramètres :
-        id (Number) : ID de la question à supprimer.
-
-    Retour : Aucun.
-
-Exemple :
-
-    await questionsModule.deleteQuestion(1);
+    await questionsModule.deleteQuestion(db, 1);
     console.log("Question deleted");
 
-3.**Gestion des Réponses (Answers)**
+3. Gestion des Réponses (Answers)
 
-Ce module permet de gérer les réponses aux questions des enquêtes.
-
-Fonction : createAnswer(answer)
+    Fonction : createAnswer(db, answer)
 
     Description : Crée une nouvelle réponse à une question.
-
     Paramètres :
-        answer (Objet) : Un objet contenant les détails de la réponse.
+        db (Object) : Instance de la base de données MongoDB.
+        answer (Object) : Un objet contenant les détails de la réponse.
             answerId (Number) : ID unique de la réponse.
             questionId (Number) : ID de la question associée.
-            response (String) : Réponse donnée.
-            userId (String) : ID de l'utilisateur ayant répondu.
-
-    Retour : Aucun.
+            title (String) : Réponse donnée.
+            Retour : ID de la réponse créée.
 
     Exemple :
 
-    const answer = {
-        answerId: 1,
-        questionId: 1,
-        response: 'Very satisfied',
-        userId: 'user123'
-    };
 
-    await answersModule.createAnswer(answer);
+const answer = {
+  answerId: 1,
+  questionId: 1,
+  title: 'Très satisfait'
+};
 
-Fonction : readAnswerById(id)
+await answersModule.createAnswer(db, answer);
 
-    Description : Lit une réponse par son ID.
+Fonction : readAnswerById(db, id)
 
-    Paramètres :
-        id (Number) : ID de la réponse.
+Description : Lit une réponse par son ID.
+Paramètres :
 
-    Retour : La réponse correspondante ou undefined si la réponse n'existe pas.
+    db (Object) : Instance de la base de données MongoDB.
+    id (Number) : ID de la réponse.
+    Retour : La réponse correspondante ou null si la réponse n'existe pas.
 
-    Exemple :
+Exemple :
 
-    const answer = await answersModule.readAnswerById(1);
-    console.log(answer);
 
-Fonction : updateAnswer(id, newDetails)
 
-    Description : Met à jour les détails d'une réponse.
+const answer = await answersModule.readAnswerById(db, 1);
+console.log(answer);
 
-    Paramètres :
-        id (Number) : ID de la réponse à mettre à jour.
-        newDetails (Objet) : Un objet contenant les nouvelles valeurs des propriétés à mettre à jour.
-            response (String) : (Optionnel) Nouvelle réponse.
-            questionId (Number) : (Optionnel) Nouveau ID de la question associée.
-            userId (String) : (Optionnel) Nouveau ID de l'utilisateur ayant répondu.
+Fonction : updateAnswer(db, id, newDetails)
 
+Description : Met à jour les détails d'une réponse existante.
+Paramètres :
+
+    db (Object) : Instance de la base de données MongoDB.
+    id (Number) : ID de la réponse à mettre à jour.
+    newDetails (Object) : Un objet contenant les nouvelles valeurs des propriétés à mettre à jour.
+        title (String) : (Optionnel) Nouvelle réponse.
+        questionId (Number) : (Optionnel) Nouveau ID de la question associée.
+        Retour : Réponse mise à jour ou null si la réponse n'existe pas.
+
+Exemple :
+
+
+await answersModule.updateAnswer(db, 1, { title: 'Satisfait' });
+
+Fonction : deleteAnswer(db, id)
+
+Description : Supprime une réponse par son ID.
+Paramètres :
+
+    db (Object) : Instance de la base de données MongoDB.
+    id (Number) : ID de la réponse à supprimer.
     Retour : Aucun.
 
 Exemple :
 
-    await answersModule.updateAnswer(1, { response: 'Satisfied' });
 
-Fonction : deleteAnswer(id)
+    await answersModule.deleteAnswer(db, 1);
+    console.log("Answer deleted");
 
-    Description : Supprime une réponse par son ID.
+Authors
 
-    Paramètres :
-        id (Number) : ID de la réponse à supprimer.
-
-    Retour : Aucun.
-
-Exemple :
-
-      await answersModule.deleteAnswer(1);
-console.log("Answer deleted");
-
-# Authors
-
-[Abdrahmane Ibrahima Demba ](https://github.com/Abdarahmane/Brief-Nosql.git)
+ [Abdrahmane Ibrahima Demba](https://github.com/Abdarahmane)

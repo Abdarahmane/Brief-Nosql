@@ -1,38 +1,37 @@
-let questions = [];
-
-async function createQuestion(question) {
-    questions.push(question);
-    console.log('Question Created:', question);
-    return question;
+async function createQuestion(db, question) {
+    const result = await db.collection('questions').insertOne(question);
+    console.log('Question Created:', result.insertedId);
+    return result.insertedId;
 }
 
-async function readQuestionById(id) {
-    const question = questions.find(question => question.questionId === id);
+async function readQuestionById(db, id) {
+    const question = await db.collection('questions').findOne({ questionId: id });
     console.log('Question Found:', question);
     return question;
 }
 
-async function updateQuestion(id, newDetails) {
-    const index = questions.findIndex(question => question.questionId === id);
-    if (index !== -1) {
-        questions[index] = { ...questions[index], ...newDetails };
-        console.log('Question Updated:', questions[index]);
-        return questions[index];
+async function updateQuestion(db, id, newDetails) {
+    const result = await db.collection('questions').findOneAndUpdate(
+        { questionId: id },
+        { $set: newDetails },
+        { returnOriginal: false }
+    );
+    if (result.value) {
+        console.log('Question Updated:', result.value);
+        return result.value;
     }
     console.log('Question Not Found for Update');
     return null;
 }
 
-async function deleteQuestion(id) {
-    const initialLength = questions.length;
-    questions = questions.filter(question => question.questionId !== id);
-    if (questions.length < initialLength) {
+async function deleteQuestion(db, id) {
+    const result = await db.collection('questions').deleteOne({ questionId: id });
+    if (result.deletedCount > 0) {
         console.log('Question Deleted:', id);
     } else {
         console.log('Question Not Found for Deletion');
     }
 }
-
 
 module.exports = {
     createQuestion,

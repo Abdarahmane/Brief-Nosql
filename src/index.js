@@ -1,65 +1,89 @@
+const connectDB = require('./config/database');
 const surveysModule = require('./surveysModule');
 const questionsModule = require('./questionsModule');
 const answersModule = require('./answersModule');
 
 async function main() {
-    console.log("MongoDB connected");
+    const client = await connectDB();
+    const db = client.db('abc_surveydb');
 
     try {
-        await exampleQuestions();
+        await runExamples(db);
     } catch (error) {
-        console.error("Error managing questions:", error);
+        console.error("An error occurred:", error);
+    } finally {
+        await client.close();
+        console.log("MongoDB connection closed.");
     }
-
-    try {
-        await exampleAnswers();
-    } catch (error) {
-        console.error("Error managing answers:", error);
-    }
-
-    await exampleSurveys();
 }
 
-async function exampleQuestions() {
+async function runExamples(db) {
+    await exampleQuestions(db);
+    await exampleAnswers(db);
+    await exampleSurveys(db);
+}
+
+async function exampleQuestions(db) {
+    console.log("Managing Questions...");
+
     const question = {
         questionId: 1,
-        text: 'How satisfied are you with our service?',
-        type: 'multiple-choice',
-        options: ['Very satisfied', 'Satisfied', 'Neutral', 'Dissatisfied', 'Very dissatisfied']
+        title: 'Comment évalueriez-vous notre service ?',
+        type: 'rating',
+        options: {
+            minValue: 1,
+            maxValue: 5,
+            step: 1
+        },
+        answers: [
+            { title: 'Très satisfait' },
+            { title: 'Satisfait' },
+            { title: 'Neutre' },
+            { title: 'Insatisfait' },
+            { title: 'Très insatisfait' }
+        ]
     };
 
-    await questionsModule.createQuestion(question);
-    await questionsModule.readQuestionById(1);
-    await questionsModule.updateQuestion(1, { text: 'How would you rate our service?' });
-    await questionsModule.deleteQuestion(1);
+    await questionsModule.createQuestion(db, question);
+    await questionsModule.readQuestionById(db, 1);
+    await questionsModule.updateQuestion(db, 1, { title: 'Comment évalueriez-vous notre support client ?' });
+    await questionsModule.deleteQuestion(db, 1);
 }
 
-async function exampleAnswers() {
+async function exampleAnswers(db) {
+    console.log("Managing Answers...");
+
     const answer = {
         answerId: 1,
         questionId: 1,
-        response: 'Very satisfied',
-        userId: 'user123'
+        title: 'Très satisfait'
     };
 
-    await answersModule.createAnswer(answer);
-    await answersModule.readAnswerById(1);
-    await answersModule.updateAnswer(1, { response: 'Satisfied' });
-    await answersModule.deleteAnswer(1);
+    await answersModule.createAnswer(db, answer);
+    await answersModule.readAnswerById(db, 1);
+    await answersModule.updateAnswer(db, 1, { title: 'Satisfait' });
+    await answersModule.deleteAnswer(db, 1);
 }
 
-async function exampleSurveys() {
+async function exampleSurveys(db) {
+    console.log("Managing Surveys...");
+
     const survey = {
         surveyId: 1,
-        name: 'Customer Satisfaction Survey',
-        description: 'A survey to measure customer satisfaction.',
-        createdBy: 'Admin'
+        name: 'Enquête de Satisfaction 001',
+        description: 'Enquête visant à évaluer la satisfaction des clients concernant nos services.',
+        createdAt: new Date().toISOString(),
+        createdBy: {
+            employeeName: 'Jane Smith',
+            employeeRole: 'Responsable du service client'
+        },
+        questions: []
     };
 
-    await surveysModule.createSurvey(survey);
-    await surveysModule.listSurveys();
-    await surveysModule.updateSurvey( 1, { name: 'Updated Survey Name' });
-    await surveysModule.deleteSurvey(1);
+    await surveysModule.createSurvey(db, survey);
+    await surveysModule.listSurveys(db);
+    await surveysModule.updateSurvey(db, 1, { name: 'Enquête de Satisfaction 002' });
+    await surveysModule.deleteSurvey(db, 1);
 }
 
 main().catch(console.error);

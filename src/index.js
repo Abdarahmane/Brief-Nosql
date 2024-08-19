@@ -28,6 +28,7 @@ async function exampleQuestions(db) {
 
     const question = {
         questionId: 1,
+        surveyId: 1, 
         title: 'Comment évalueriez-vous notre service ?',
         type: 'rating',
         options: {
@@ -76,8 +77,8 @@ async function exampleSurveys(db) {
         createdBy: {
             employeeName: 'Jane Smith',
             employeeRole: 'Responsable du service client'
-        },
-        questions: []
+        }
+       
     };
 
     await surveysModule.createSurvey(db, survey);

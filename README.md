@@ -16,9 +16,6 @@ Avant de commencer, assurez-vous d'avoir installé les éléments suivants :
 Suivez ces étapes pour configurer le projet sur votre machine locale :
 
 
-# Project Title
-
-A brief description of what this project does and who it's for
 
 1. **Clonez le repository :**
 

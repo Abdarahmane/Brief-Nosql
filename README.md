@@ -94,20 +94,23 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
 
 ### 2. Gestion des Questions (Questions)
 
+### 2. Gestion des Questions (Questions)
+
 - **Fonction :** `createQuestion(db, question)`
 
-  Crée une nouvelle question dans la base de données.  
+  Crée une nouvelle question dans la base de données et l'associe à une enquête.  
   **Paramètres :**
   - `db` (Object) : Instance de la base de données MongoDB.
-  - `question` (Object) : Un objet contenant les détails de la question.
-    - `questionId` (Number) : ID unique de la question.
+  - `question` (Object) : Détails de la question.
+    - `questionId` (String) : ID unique de la question.
+    - `surveyId` (String) : ID de l'enquête à laquelle la question est associée.
     - `text` (String) : Texte de la question.
     - `type` (String) : Type de question (ex : choix multiples, évaluation).
     - `options` (Object) : Options pour les questions à choix multiples.
       - `minValue` (Number) : Valeur minimale.
       - `maxValue` (Number) : Valeur maximale.
       - `step` (Number) : Pas entre les valeurs.
-    - `answers` (Array) : Liste des réponses possibles.  
+    - `answers` (Array) : Liste des réponses possibles.
   **Retour :** ID de la question créée.
 
 - **Fonction :** `readQuestionById(db, id)`

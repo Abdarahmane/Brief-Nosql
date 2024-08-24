@@ -94,8 +94,6 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
 
 ### 2. Gestion des Questions (Questions)
 
-### 2. Gestion des Questions (Questions)
-
 - **Fonction :** `createQuestion(db, question)`
 
   Crée une nouvelle question dans la base de données et l'associe à une enquête.  

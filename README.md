@@ -20,7 +20,7 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
 1. **Clonez le repository :**
 
     ```bash
-    git clone https://github.com/Abdarahmane/Brief-Nosql.git
+    git clone https://github.com/Abdarahmane/abc-survey-app.git
     ```
 
 2. **Accédez au dossier du projet :**

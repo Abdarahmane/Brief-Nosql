@@ -15,8 +15,6 @@ Avant de commencer, assurez-vous d'avoir installé les éléments suivants :
 
 Suivez ces étapes pour configurer le projet sur votre machine locale :
 
-
-
 1. **Clonez le repository :**
 
     ```bash
@@ -26,11 +24,14 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
 2. **Accédez au dossier du projet :**
 
     ```bash
-     cd abc-survey-app
+    cd abc-survey-app
     ```
-3. **Installation de Dépendance :**  
 
-       npm install
+3. **Installation des dépendances :**
+
+    ```bash
+    npm install
+    ```
 
 4. **Configurez la base de données :**
 
@@ -42,7 +43,7 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
     Pour démarrer l'application, exécutez la commande suivante :
 
     ```bash
-       npm start
+    npm start
     ```
 
 ## Fonctionnalités
@@ -62,7 +63,7 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
     - `createdBy` (Object) : Informations sur le créateur.
       - `employeeName` (String) : Nom de l'employé ayant créé l'enquête.
       - `employeeRole` (String) : Rôle de l'employé.
-    - `questions` (Array) : Liste des questions associées à l'enquête.  
+    
   **Retour :** ID de l'enquête créée.
 
 - **Fonction :** `listSurveys(db)`
@@ -72,24 +73,24 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
   - `db` (Object) : Instance de la base de données MongoDB.  
   **Retour :** Tableau des enquêtes.
 
-- **Fonction :** `updateSurvey(db, id, newDetails)`
+- **Fonction :** `updateSurvey(db, surveyId, newDetails)`
 
   Met à jour les détails d'une enquête existante.  
   **Paramètres :**
   - `db` (Object) : Instance de la base de données MongoDB.
-  - `id` (Number) : ID de l'enquête à mettre à jour.
+  - `SurveyId` (Number) : ID de l'enquête à mettre à jour.
   - `newDetails` (Object) : Un objet contenant les nouvelles valeurs des propriétés à mettre à jour.
     - `name` (String) : (Optionnel) Nouveau nom de l'enquête.
     - `description` (String) : (Optionnel) Nouvelle description de l'enquête.
     - `createdBy` (Object) : (Optionnel) Nouvelles informations sur le créateur.  
   **Retour :** Enquête mise à jour ou null si l'enquête n'existe pas.
 
-- **Fonction :** `deleteSurvey(db, id)`
+- **Fonction :** `deleteSurvey(db, surveyId)`
 
   Supprime une enquête par son ID.  
   **Paramètres :**
   - `db` (Object) : Instance de la base de données MongoDB.
-  - `id` (Number) : ID de l'enquête à supprimer.  
+  - `surveyId` (Number) : ID de l'enquête à supprimer.  
   **Retour :** Aucun.
 
 ### 2. Gestion des Questions (Questions)
@@ -100,8 +101,8 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
   **Paramètres :**
   - `db` (Object) : Instance de la base de données MongoDB.
   - `question` (Object) : Détails de la question.
-    - `questionId` (String) : ID unique de la question.
-    - `surveyId` (String) : ID de l'enquête à laquelle la question est associée.
+    - `questionId` (Number) : ID unique de la question.
+    - `surveyId` (Number) : ID de l'enquête à laquelle la question est associée.
     - `text` (String) : Texte de la question.
     - `type` (String) : Type de question (ex : choix multiples, évaluation).
     - `options` (Object) : Options pour les questions à choix multiples.
@@ -111,32 +112,32 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
     - `answers` (Array) : Liste des réponses possibles.
   **Retour :** ID de la question créée.
 
-- **Fonction :** `readQuestionById(db, id)`
+- **Fonction :** `readQuestionById(db, questionId)`
 
   Lit une question par son ID.  
   **Paramètres :**
   - `db` (Object) : Instance de la base de données MongoDB.
-  - `id` (Number) : ID de la question.  
+  - `questionId` (Number) : ID de la question.  
   **Retour :** La question correspondante ou null si la question n'existe pas.
 
-- **Fonction :** `updateQuestion(db, id, newDetails)`
+- **Fonction :** `updateQuestion(db, questionId, newDetails)`
 
   Met à jour les détails d'une question existante.  
   **Paramètres :**
   - `db` (Object) : Instance de la base de données MongoDB.
-  - `id` (Number) : ID de la question à mettre à jour.
+  - `questionId` (Number) : ID de la question à mettre à jour.
   - `newDetails` (Object) : Un objet contenant les nouvelles valeurs des propriétés à mettre à jour.
     - `text` (String) : (Optionnel) Nouveau texte de la question.
     - `type` (String) : (Optionnel) Nouveau type de question.
     - `options` (Object) : (Optionnel) Nouvelles options pour la question.  
   **Retour :** Question mise à jour ou null si la question n'existe pas.
 
-- **Fonction :** `deleteQuestion(db, id)`
+- **Fonction :** `deleteQuestion(db, questionId)`
 
   Supprime une question par son ID.  
   **Paramètres :**
   - `db` (Object) : Instance de la base de données MongoDB.
-  - `id` (Number) : ID de la question à supprimer.  
+  - `questionId` (Number) : ID de la question à supprimer.  
   **Retour :** Aucun.
 
 ### 3. Gestion des Réponses (Answers)
@@ -152,40 +153,33 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
     - `title` (String) : Réponse donnée.  
   **Retour :** ID de la réponse créée.
 
-- **Fonction :** `readAnswerById(db, id)`
+- **Fonction :** `readAnswerById(db, answerId)`
 
   Lit une réponse par son ID.  
   **Paramètres :**
   - `db` (Object) : Instance de la base de données MongoDB.
-  - `id` (Number) : ID de la réponse.  
+  - `answerId` (Number) : ID de la réponse.  
   **Retour :** La réponse correspondante ou null si la réponse n'existe pas.
 
-- **Fonction :** `updateAnswer(db, id, newDetails)`
+- **Fonction :** `updateAnswer(db, answerId, newDetails)`
 
   Met à jour les détails d'une réponse existante.  
   **Paramètres :**
   - `db` (Object) : Instance de la base de données MongoDB.
-  - `id` (Number) : ID de la réponse à mettre à jour.
+  - `answerId` (Number) : ID de la réponse à mettre à jour.
   - `newDetails` (Object) : Un objet contenant les nouvelles valeurs des propriétés à mettre à jour.
     - `title` (String) : (Optionnel) Nouvelle réponse.
     - `questionId` (Number) : (Optionnel) Nouveau ID de la question associée.  
   **Retour :** Réponse mise à jour ou null si la réponse n'existe pas.
 
-- **Fonction :** `deleteAnswer(db, id)`
+- **Fonction :** `deleteAnswer(db, answerId)`
 
   Supprime une réponse par son ID.  
   **Paramètres :**
   - `db` (Object) : Instance de la base de données MongoDB.
-  - `id` (Number) : ID de la réponse à supprimer.  
+  - `answerId` (Number) : ID de la réponse à supprimer.  
   **Retour :** Aucun.
 
 ## Auteur
 
 [Abdarahmane Ibrahima Demba](https://github.com/Abdarahmane)
-
-
-
-
-
-
-

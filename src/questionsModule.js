@@ -1,4 +1,16 @@
+// src/questionsModule.js
+
 async function createQuestion(db, question) {
+    const surveyExists = await db.collection('surveys').findOne({ surveyId: question.surveyId });
+    if (!surveyExists) {
+        throw new Error("Le surveyId fourni n'existe pas.");
+    }
+
+    const existingQuestion = await db.collection('questions').findOne({ questionId: question.questionId });
+    if (existingQuestion) {
+        throw new Error("L'ID de la question existe déjà.");
+    }
+
     const result = await db.collection('questions').insertOne(question);
     console.log('Question Created:', result.insertedId);
     return result.insertedId;
@@ -37,5 +49,5 @@ module.exports = {
     createQuestion,
     readQuestionById,
     updateQuestion,
-    deleteQuestion
+    deleteQuestion,
 };

@@ -1,4 +1,11 @@
+// surveysModule.js
+
 async function createSurvey(db, survey) {
+    const existingSurvey = await db.collection('surveys').findOne({ surveyId: survey.surveyId });
+    if (existingSurvey) {
+        throw new Error("L'ID de l'enquête existe déjà.");
+    }
+
     const result = await db.collection('surveys').insertOne(survey);
     console.log('Survey Created:', result.insertedId);
     return result.insertedId;

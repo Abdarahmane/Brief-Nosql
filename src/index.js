@@ -3,6 +3,7 @@ const surveysModule = require('./surveysModule');
 const questionsModule = require('./questionsModule');
 const answersModule = require('./answersModule');
 
+
 async function main() {
     const client = await connectDB();
     const db = client.db('abc_surveydb');
@@ -18,9 +19,9 @@ async function main() {
 }
 
 async function runExamples(db) {
+    await exampleSurveys(db);
     await exampleQuestions(db);
     await exampleAnswers(db);
-    await exampleSurveys(db);
 }
 
 async function exampleQuestions(db) {
@@ -60,6 +61,7 @@ async function exampleAnswers(db) {
         title: 'Très satisfait'
     };
 
+    
     await answersModule.createAnswer(db, answer);
     await answersModule.readAnswerById(db, 1);
     await answersModule.updateAnswer(db, 1, { title: 'Satisfait' });
@@ -78,12 +80,15 @@ async function exampleSurveys(db) {
             employeeName: 'Jane Smith',
             employeeRole: 'Responsable du service client'
         }
-       
     };
 
+ 
     await surveysModule.createSurvey(db, survey);
+
+    
     await surveysModule.listSurveys(db);
     await surveysModule.updateSurvey(db, 1, { name: 'Enquête de Satisfaction 002' });
+
     await surveysModule.deleteSurvey(db, 1);
 }
 

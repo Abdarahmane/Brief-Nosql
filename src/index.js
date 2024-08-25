@@ -84,11 +84,8 @@ async function exampleSurveys(db) {
 
  
     await surveysModule.createSurvey(db, survey);
-
-    
     await surveysModule.listSurveys(db);
     await surveysModule.updateSurvey(db, 1, { name: 'Enquête de Satisfaction 002' });
-
     await surveysModule.deleteSurvey(db, 1);
 }
 

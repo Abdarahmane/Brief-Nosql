@@ -1,4 +1,3 @@
-// surveysModule.js
 
 async function createSurvey(db, survey) {
     const existingSurvey = await db.collection('surveys').findOne({ surveyId: survey.surveyId });

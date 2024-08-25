@@ -103,7 +103,7 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
   - `question` (Object) : Détails de la question.
     - `questionId` (Number) : ID unique de la question.
     - `surveyId` (Number) : ID de l'enquête à laquelle la question est associée.
-    - `text` (String) : Texte de la question.
+    - `title` (String) : Title de la question.
     - `type` (String) : Type de question (ex : choix multiples, évaluation).
     - `options` (Object) : Options pour les questions à choix multiples.
       - `minValue` (Number) : Valeur minimale.
@@ -127,7 +127,7 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
   - `db` (Object) : Instance de la base de données MongoDB.
   - `questionId` (Number) : ID de la question à mettre à jour.
   - `newDetails` (Object) : Un objet contenant les nouvelles valeurs des propriétés à mettre à jour.
-    - `text` (String) : (Optionnel) Nouveau texte de la question.
+    - `title` (String) : (Optionnel) Nouveau title de la question.
     - `type` (String) : (Optionnel) Nouveau type de question.
     - `options` (Object) : (Optionnel) Nouvelles options pour la question.  
   **Retour :** Question mise à jour ou null si la question n'existe pas.

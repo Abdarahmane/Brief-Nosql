@@ -109,7 +109,7 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
       - `minValue` (Number) : Valeur minimale.
       - `maxValue` (Number) : Valeur maximale.
       - `step` (Number) : Pas entre les valeurs.
-    - `answers` (Array) : Liste des réponses possibles.
+   
   **Retour :** ID de la question créée.
 
 - **Fonction :** `readQuestionById(db, questionId)`

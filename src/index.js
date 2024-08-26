@@ -36,14 +36,8 @@ async function exampleQuestions(db) {
             minValue: 1,
             maxValue: 5,
             step: 1
-        },
-        answers: [
-            { title: 'Très satisfait' },
-            { title: 'Satisfait' },
-            { title: 'Neutre' },
-            { title: 'Insatisfait' },
-            { title: 'Très insatisfait' }
-        ]
+        }
+      
     };
 
     await questionsModule.createQuestion(db, question);
